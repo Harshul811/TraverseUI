@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 
-const initialItineraries = [
+const initialList = [
   {
     user_id: '1100',
     description: 'Trip to NY',
@@ -50,7 +50,7 @@ const initialBusiness = [
 ];
 
 const page = () => {
-  const [itineraries, setItineraries] = useState<any[]>(initialItineraries); // State to store the itineraries
+  const [itineraries, setItineraries] = useState<any[]>(initialList); // State to store the itineraries
   const [loading, setLoading] = useState<boolean>(false); // Loading state
 
   useEffect(() => {

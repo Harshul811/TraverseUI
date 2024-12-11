@@ -12,8 +12,8 @@ const Page = () => {
     const description = name; // Use the name as the description
 
     try {
-      const response = await fetch('http://localhost:8001/lists/', {
-        method: 'POST',
+        const response = await fetch(`http://127.0.0.1:8001/lists/?user_id=${userId}&location=${location}&date=${date}&description=${description}`, {
+            method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -25,10 +25,19 @@ const Page = () => {
         }),
       });
 
+   
+
       if (response.ok) {
         const data = await response.json();
         alert('List created successfully!');
         console.log(data);
+        
+        const listId = data.list_id;
+        localStorage.setItem('listId', listId);
+        const location = data.location;
+        localStorage.setItem('location', location);
+        // const listId = data.list_id;
+        
       } else {
         const errorData = await response.json();
         console.error('Error creating list:', errorData);
@@ -99,15 +108,28 @@ const Page = () => {
 
       {/* Bottom Section: Swipe Page Button */}
       <div className="flex items-center justify-center p-4 mt-auto mb-6">
+      <Link
+            href={{
+                pathname: '/swipe-page2',
+                query: { 
+                    listId: localStorage.getItem('listId'),  // Pass listId as a query parameter
+                    location: localStorage.getItem('location')  // Pass location as a query parameter
+                  },
+                              
+                }}
+        >
+
+
         <button
           onClick={handleCreateList}
           className="btn btn-primary w-full max-w-sm"
         >
           Create List
         </button>
-        <Link href="/swipe-page">
-          <button className="btn btn-secondary w-full max-w-sm ml-4">Swipe Page</button>
         </Link>
+        {/* <Link href="/swipe-page">
+          <button className="btn btn-secondary w-full max-w-sm ml-4">Swipe Page</button>
+        </Link> */}
       </div>
     </div>
   );

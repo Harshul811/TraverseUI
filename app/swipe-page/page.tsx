@@ -1,13 +1,17 @@
 'use client'
-import React, { useState } from 'react';
+import React, { useEffect , useState } from 'react';
+import { useSearchParams } from 'next/navigation';
+
 import Link from 'next/link';
 
+
+// i have gotten the list id , location 
+// /composite/view_full_list and it takes list_id to get the full list , and use get /composite/serve_next to swipe to the next bussiness /composite/serve_next needs list_id and location
 const initialBusiness = [
   {
     business_name: 'Burger',
-    description: 'Delicious close-up photo of a burger.',
-    image: 'https://images.pexels.com/photos/1639562/pexels-photo-1639562.jpeg',
     location: 'NY',
+    description: 'Delicious close-up photo of a burger.',
     address: 'Shake Shack, Madison Square Park, New York, NY',
     category: 'Burger',
     business_id: 122,
@@ -15,7 +19,6 @@ const initialBusiness = [
   {
     business_name: 'Pizza',
     description: 'Classic New York-style pizza.',
-    image: 'https://images.pexels.com/photos/2147491/pexels-photo-2147491.jpeg',
     location: 'NY',
     address: 'Lombardi Pizza, 32 Spring St, New York, NY',
     category: 'Pizza',
@@ -24,7 +27,6 @@ const initialBusiness = [
   {
     business_name: 'Sushi',
     description: 'Fresh sushi rolls served with soy sauce.',
-    image: 'https://images.pexels.com/photos/2098085/pexels-photo-2098085.jpeg',
     location: 'Sushi Nakazawa, 23 Commerce St, New York, NY',
     address: 'Sushi Nakazawa, 23 Commerce St, New York, NY',
     category: 'Sushi',
@@ -33,6 +35,16 @@ const initialBusiness = [
 ];
 
 const Page = () => {
+    const searchParams = useSearchParams();
+    const listId = searchParams.get('listId'); // Get listId from the URL query
+  const location = searchParams.get('location'); // Get location from the URL query
+
+  // Use the listId and location in your swipe page logic
+  console.log('List ID:', listId);
+  console.log('Location:', location);
+ 
+  
+  
   const [businesses, setBusinesses] = useState(initialBusiness);
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -76,6 +88,8 @@ const Page = () => {
   };
 
   return (
+    
+    
     <div className="flex flex-col h-screen bg-gray-100">
       {/* Top Section: TRAVERSE */}
       <div className="flex justify-between items-center p-4">
@@ -91,7 +105,7 @@ const Page = () => {
       <div className="flex-grow flex flex-col items-center justify-center space-y-6">
         {currentIndex < businesses.length ? (
           <div className="w-full max-w-md p-6 bg-white shadow-lg rounded-lg">
-            <img src={businesses[currentIndex].image} alt={businesses[currentIndex].business_name} className="rounded-lg" />
+            
             <h3 className="text-xl font-semibold">{businesses[currentIndex].business_name}</h3>
             <p>{businesses[currentIndex].description}</p>
             <p><strong>Location:</strong> {businesses[currentIndex].location}</p>
