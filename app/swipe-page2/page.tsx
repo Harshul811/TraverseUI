@@ -1,6 +1,7 @@
 'use client'
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 
 // Define the type for business data
 interface Business {
@@ -14,8 +15,10 @@ interface Business {
 
 const SwipePage = () => {
   const searchParams = useSearchParams();
-  const listId = searchParams.get('listId');  // Get listId from the URL query
-  const location = searchParams.get('location');  // Get location from the URL query
+  // const listId = 1;  // Get listId from the URL query
+  const location = searchParams.get('location');
+  const listId = searchParams.get('listId');  // Get location from the URL query
+  // const listId=1;
 
   const [currentBusiness, setCurrentBusiness] = useState<Business | null>(null);
 
@@ -47,13 +50,52 @@ const SwipePage = () => {
     }
   };
 
-  const handleSwipe = (direction: 'left' | 'right') => {
+  const handleSwipe = async (direction: 'left' | 'right') => {
     // Call fetchNextBusiness when user swipes
+    if (direction === 'right' && currentBusiness) {
+      try {
+        const response = await fetch(
+          `http://127.0.0.1:8001/lists/${listId}/itineraries/?business_id=${currentBusiness.business_id}`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              list_id: listId,
+              business_id: currentBusiness.business_id,
+            }),
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(`Failed to save business: ${response.statusText}`);
+        }
+
+        console.log(`Successfully added business ${currentBusiness.business_id} to the itinerary.`);
+      } catch (error) {
+        console.error('Error adding business to itinerary:', error);
+        alert('Failed to save the business. Please try again.');
+      }
+    }
+
     fetchNextBusiness();
   };
 
   return (
+    <div className="flex flex-col h-screen bg-gray-100">
+      {/* Top Section: TRAVERSE */}
+      <div className="flex justify-between items-center p-4">
+        {/* App Name */}
+        <h1 className="text-3xl font-bold text-primary">TRAVERSE</h1>
+        {/* Go to Dashboard Button */}
+        <Link href="/third">
+          <button className="btn btn-primary">Go to Dashboard</button>
+        </Link>
+      </div>
+      
     <div className="flex flex-col items-center justify-center h-screen p-4">
+      
       <h1 className="text-3xl font-bold text-primary mb-6">Swipe Page</h1>
 
       {currentBusiness ? (
@@ -87,6 +129,7 @@ const SwipePage = () => {
         <p><strong>List ID:</strong> {listId}</p>
         <p><strong>Location:</strong> {location}</p>
       </div>
+    </div>
     </div>
   );
 };

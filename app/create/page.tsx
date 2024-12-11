@@ -29,7 +29,7 @@ const Page = () => {
 
       if (response.ok) {
         const data = await response.json();
-        alert('List created successfully!');
+        // alert('List created successfully!');
         console.log(data);
         
         const listId = data.list_id;

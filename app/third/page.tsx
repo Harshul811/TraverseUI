@@ -26,7 +26,7 @@ const page = () => {
         </Link>
 
         {/* Already Existing Button */}
-        <Link href="/existing">
+        <Link href="/existing2">
           <button className="btn btn-secondary w-full max-w-sm">Existing Itineraries</button>
         </Link>
       </div>
